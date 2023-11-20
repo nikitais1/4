@@ -2,13 +2,15 @@ from abc import ABC, abstractmethod
 
 
 class Vacancy(ABC):
+    """Абстрактный класс для создания вакансии"""
 
     @abstractmethod
     def __repr__(self):
         pass
 
 
-class VacancyHH(ABC):
+class VacancyHH(Vacancy):
+    """Класс для создания вакансии HeadHunter"""
 
     def __init__(self, title, link, requirement, responsibility, salary_from, salary_to):
         self.title = title
@@ -27,18 +29,19 @@ class VacancyHH(ABC):
                 f'Зарплата до: {self.salary_to}\n')
 
 
-class VacancySJ(ABC):
+class VacancySJ(Vacancy):
+    """Класс для создания вакансии SuperJob"""
 
     def __init__(self, title, link, description, salary_from, salary_to):
         self.title = title
         self.link = link
         self.description = description
-        self.__salary_from = salary_from
+        self.salary_from = salary_from
         self.salary_to = salary_to
 
     def __repr__(self):
         return (f'Вакансия: {self.title}\n'
                 f'Ссылка на вакансию: {self.link}\n'
                 f'Описание: {self.description}\n'
-                f'Зарплата от: {self.__salary_from}\n'
+                f'Зарплата от: {self.salary_from}\n'
                 f'Зарплата до: {self.salary_to}\n')
