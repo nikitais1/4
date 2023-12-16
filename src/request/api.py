@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import requests
-from config import URL_HH, URL_SJ, HEADERS_SJ
-from src.data_json.work_with_json import WorkWithJsonHH, WorkWithJsonSJ
+from config import URL_HH, URL_SJ, HEADERS_SJ, JSON_HH, JSON_SJ
+from src.data_json.work_with_json import WorkWithJson
 
 
 class API(ABC):
@@ -30,7 +30,7 @@ class HH(API):
     def get_vacancies(self):
         """Метод для получения вакансий HeadHunter по API"""
         response = requests.get(url=self.url, params=self.params)
-        return WorkWithJsonHH.save_json(response.json()['items'])
+        return WorkWithJson.save_json(response.json()['items'], JSON_HH)
 
 
 class SJ(API):
@@ -49,4 +49,4 @@ class SJ(API):
             'X-Api-App-Id': HEADERS_SJ
         }
         response = requests.get(url=self.url, params=self.params, headers=headers)
-        return WorkWithJsonSJ.save_json(response.json()['objects'])
+        return WorkWithJson.save_json(response.json()['objects'], JSON_SJ)

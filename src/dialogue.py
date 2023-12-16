@@ -1,6 +1,7 @@
-from src.data_json.work_with_json import WorkWithJsonHH, WorkWithJsonSJ
+from src.data_json.work_with_json import WorkWithJson
 from src.request.api import HH, SJ
 from src.vacancy.vacancy import VacancySJ, VacancyHH
+from config import JSON_HH, JSON_SJ
 
 
 def filter_by_salary(salary_key, vacancies_for_search):
@@ -27,15 +28,11 @@ def user_interaction():
     print('Добро пожаловать в ПарсерВакансер!\nДавайте подберем для вас вакансии')
     search_query = input("Введите поисковый запрос: ").title().strip()
     if isinstance(search_query, str) and search_query.isalpha():
-        hh = HH(search_query)
-        sj = SJ(search_query)
-        hh.get_vacancies()
-        sj.get_vacancies()
+        HH(search_query).get_vacancies()
+        SJ(search_query).get_vacancies()
 
-        wwj_hh = WorkWithJsonHH()
-        wwj_sj = WorkWithJsonSJ()
-        vacancy_hh = wwj_hh.read_json()
-        vacancy_sj = wwj_sj.read_json()
+        vacancy_hh = WorkWithJson.read_json(JSON_HH)
+        vacancy_sj = WorkWithJson.read_json(JSON_SJ)
         vacancy_s = []
         for i in vacancy_hh:
             salary_to = '-'
@@ -56,6 +53,7 @@ def user_interaction():
             if i['payment_from']:
                 salary_from = i['payment_from']
             vacancy_s.append(VacancySJ(i['profession'], i['link'], i['candidat'], salary_from, salary_to))
+
         while True:
             key_salary = int(input("Введите минимальную заработную плату: "))
             if isinstance(key_salary, int):
@@ -63,12 +61,14 @@ def user_interaction():
             if not vac:
                 print("Нет вакансий, соответствующих заданным критериям.")
                 break
+
             result = int(input("1 - Показать вакансии\n2 - Ввести дополнительное ключевое слово в названии вакансии\n"))
             if result == 1:
                 print(vac)
                 break
             elif result == 2:
                 key_world = str(input("Введите дополнительное ключевое слово в названии вакансии: ").title().strip())
+
             vac2 = filter_by_strings((key_world,), vac)
             if not vac2:
                 print("Нет вакансий, соответствующих заданным критериям.")
